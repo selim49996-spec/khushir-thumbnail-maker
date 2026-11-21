@@ -1,0 +1,1 @@
+# khushir-thumbnail-maker
