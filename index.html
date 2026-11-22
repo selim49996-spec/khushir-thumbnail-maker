@@ -20,7 +20,7 @@ button.secondary{background:#eee7f8;color:#42206d}.actions{display:flex;gap:8px;
 .preview{display:flex;justify-content:center;align-items:center;background:#eee9f5;border-radius:11px;padding:12px;min-height:250px;overflow:hidden}
 canvas{display:block;max-width:100%;height:auto;max-height:72vh;border-radius:6px;box-shadow:0 4px 16px #0002}
 .hint{font-size:11px;color:#746b80;line-height:1.5}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.tools{display:grid;grid-template-columns:1fr 1fr;gap:9px}.check{display:flex;align-items:center;gap:7px;font-size:12px;margin-top:10px}.check input{accent-color:#7138d8}
+.check{display:flex;align-items:center;gap:7px;font-size:12px;margin-top:10px}.check input{accent-color:#7138d8}
 @media(max-width:760px){main{grid-template-columns:1fr}.preview{order:-1;min-height:180px}canvas{max-height:50vh}.top h1{font-size:20px}}
 </style>
 </head>
@@ -29,19 +29,22 @@ canvas{display:block;max-width:100%;height:auto;max-height:72vh;border-radius:6p
 <main class="wrap">
 <section class="panel">
 <h2>থাম্বনেল সাজান</h2>
+<label for="template">ডিজাইন টেমপ্লেট</label>
+<select id="template"><option value="classic">Classic ডিজাইন</option><option value="dhamaal">🔥 3D Cartoon ধামাল</option></select>
 <label for="photo">নিজের ছবি / ব্যাকগ্রাউন্ড ছবি</label><input id="photo" type="file" accept="image/*">
 <label for="logo">চ্যানেলের লোগো (ঐচ্ছিক)</label><input id="logo" type="file" accept="image/*">
-<label for="headline">ভিডিওর শিরোনাম</label><input id="headline" type="text" maxlength="100" value="আজকের মজার গল্প">
+<label for="headline">ভিডিওর শিরোনাম</label><input id="headline" type="text" maxlength="100" value="বানরের মজার কাণ্ড">
+<label for="subline">নিচের ব্যানারের লেখা</label><input id="subline" type="text" maxlength="65" value="একটি মজার শিক্ষামূলক গল্প">
 <label for="channel">চ্যানেলের নাম</label><input id="channel" type="text" maxlength="55" value="Khushir Cartoon Ghor">
 <div class="row">
 <div><label for="lang">ভাষা</label><select id="lang"><option>বাংলা</option><option>हिन्दी</option><option>English</option><option>ગુજરાતી</option><option>मराठी</option><option>தமிழ்</option><option>తెలుగు</option><option>ಕನ್ನಡ</option><option>മലയാളം</option><option>ਪੰਜਾਬੀ</option><option>اردو</option><option>অসমীয়া</option><option>नेपाली</option><option>ଓଡ଼ିଆ</option></select></div>
-<div><label for="size">সাইজ</label><select id="size"><option value="wide">16:9 YouTube</option><option value="short">9:16 Shorts</option><option value="square">1:1 Square</option></select></div>
+<div><label for="size">সাইজ</label><select id="size"><option value="wide">16:9 YouTube</option><option value="short" selected>9:16 Shorts</option><option value="square">1:1 Square</option></select></div>
 </div>
 <div class="row">
-<div><label for="bg1">ব্যাকগ্রাউন্ড রং ১</label><input id="bg1" type="color" value="#251044"></div>
-<div><label for="bg2">ব্যাকগ্রাউন্ড রং ২</label><input id="bg2" type="color" value="#7138d8"></div>
-<div><label for="textColor">লেখার রং</label><input id="textColor" type="color" value="#ffe34d"></div>
-<div><label for="strokeColor">লেখার বর্ডার</label><input id="strokeColor" type="color" value="#170b2b"></div>
+<div><label for="bg1">ব্যাকগ্রাউন্ড রং ১</label><input id="bg1" type="color" value="#11b9ec"></div>
+<div><label for="bg2">ব্যাকগ্রাউন্ড রং ২</label><input id="bg2" type="color" value="#27b84b"></div>
+<div><label for="textColor">লেখার রং</label><input id="textColor" type="color" value="#ffe900"></div>
+<div><label for="strokeColor">লেখার বর্ডার</label><input id="strokeColor" type="color" value="#160b24"></div>
 </div>
 <label for="fontSize">লেখার সাইজ: <span id="fontValue">68</span></label><input id="fontSize" type="range" min="28" max="110" value="68">
 <div class="row">
@@ -55,8 +58,8 @@ canvas{display:block;max-width:100%;height:auto;max-height:72vh;border-radius:6p
 </section>
 <section class="panel">
 <h2>লাইভ প্রিভিউ</h2>
-<div class="preview"><canvas id="canvas" width="1280" height="720"></canvas></div>
-<p class="hint">টাইটেল, রং, সাইজ বা ছবি বদলালে প্রিভিউ সঙ্গে সঙ্গে আপডেট হবে।</p>
+<div class="preview"><canvas id="canvas" width="720" height="1280"></canvas></div>
+<p class="hint">টেমপ্লেট, টাইটেল, রং, সাইজ বা ছবি বদলালে প্রিভিউ সঙ্গে সঙ্গে আপডেট হবে।</p>
 </section>
 </main>
 <script>
@@ -65,7 +68,7 @@ let photo=null,logo=null;
 function readImage(file,done){if(!file)return;const reader=new FileReader();reader.onload=()=>{const im=new Image();im.onload=()=>done(im);im.src=reader.result};reader.readAsDataURL(file)}
 $('photo').addEventListener('change',e=>readImage(e.target.files[0],im=>{photo=im;draw()}));
 $('logo').addEventListener('change',e=>readImage(e.target.files[0],im=>{logo=im;draw()}));
-const watch=['headline','channel','lang','size','bg1','bg2','textColor','strokeColor','fontSize','position','fit','shadow','overlay'];
+const watch=['template','headline','subline','channel','lang','size','bg1','bg2','textColor','strokeColor','fontSize','position','fit','shadow','overlay'];
 watch.forEach(id=>$(id).addEventListener('input',()=>{if(id==='fontSize')$('fontValue').textContent=$('fontSize').value;draw()}));
 function drawImage(im,x,y,w,h,fit){
  const scale=fit==='contain'?Math.min(w/im.width,h/im.height):Math.max(w/im.width,h/im.height);
@@ -73,35 +76,71 @@ function drawImage(im,x,y,w,h,fit){
  if(fit==='contain'){ctx.drawImage(im,x+(w-dw)/2,y+(h-dh)/2,dw,dh)}
  else{const sx=(dw-w)/2,sy=(dh-h)/2;ctx.drawImage(im,sx/scale,sy/scale,w/scale,h/scale,x,y,w,h)}
 }
-function roundRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function rr(x,y,w,h,r,fill){ctx.fillStyle=fill;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function fitLines(text,maxW,font,maxLines=5){
+ let lines=[],line='';ctx.font=`900 ${font}px system-ui,"Noto Sans Bengali",sans-serif`;
+ for(const word of text.split(/\s+/)){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=word}else line=test}
+ if(line)lines.push(line);
+ while(lines.length>maxLines&&font>24){font-=3;lines=[];line='';ctx.font=`900 ${font}px system-ui,"Noto Sans Bengali",sans-serif`;for(const word of text.split(/\s+/)){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line)}
+ return {lines,font};
+}
+function drawDhamaal(w,h,pad){
+ // bright illustrated sky and green countryside
+ const sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,$('bg1').value);sky.addColorStop(.62,'#8cecff');sky.addColorStop(1,$('bg2').value);
+ ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+ ctx.fillStyle='rgba(255,255,255,.8)';[[.15,.36,.10],[.82,.42,.13],[.50,.55,.07]].forEach(([x,y,r])=>{ctx.beginPath();ctx.arc(w*x,h*y,h*r,0,Math.PI*2);ctx.fill()});
+ ctx.fillStyle='#27a83e';ctx.beginPath();ctx.ellipse(w*.5,h*.76,w*.72,h*.28,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#76d83d';ctx.beginPath();ctx.ellipse(w*.5,h*.83,w*.7,h*.22,0,0,Math.PI*2);ctx.fill();
+ // decorative trees
+ for(const x of [.04,.96]){ctx.fillStyle='#80502b';ctx.fillRect(w*x-w*.018,h*.35,w*.04,h*.48);ctx.fillStyle='#168b35';for(let j=0;j<5;j++){ctx.beginPath();ctx.arc(w*x+(j-2)*w*.045,h*.34-Math.abs(j-2)*h*.018,h*.09,0,Math.PI*2);ctx.fill()}}
+ // optional uploaded background
+ if(photo){ctx.save();ctx.globalAlpha=$('overlay').checked?.30:.75;drawImage(photo,0,h*.18,w,h*.72,$('fit').value);ctx.restore()}
+ // wood title board
+ const boardY=h*.055,boardH=h*.25;
+ ctx.save();ctx.shadowColor='#301500';ctx.shadowBlur=18;ctx.shadowOffsetY=8;
+ rr(pad*.45,boardY,w-pad*.9,boardH,Math.max(16,w*.035),'#8c4a16');
+ ctx.restore();
+ for(let i=0;i<5;i++){ctx.strokeStyle=i%2?'#c27a32':'#6c3510';ctx.lineWidth=Math.max(3,w*.006);ctx.beginPath();ctx.moveTo(pad*.65,boardY+boardH*(.12+i*.17));ctx.lineTo(w-pad*.65,boardY+boardH*(.12+i*.17));ctx.stroke()}
+ ctx.strokeStyle='#e6a34a';ctx.lineWidth=Math.max(3,w*.008);ctx.strokeRect(pad*.58,boardY+10,w-pad*1.16,boardH-20);
+ const title=$('headline').value.trim()||'আপনার ভিডিওর শিরোনাম';
+ let f=Math.min(Number($('fontSize').value)*1.05,w*.105);const result=fitLines(title,w-pad*2.1,f,3);f=result.font;
+ ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`1000 ${f}px system-ui,"Noto Sans Bengali",sans-serif`;ctx.lineJoin='round';
+ const lineH=f*1.12,total=result.lines.length*lineH,start=boardY+(boardH-total)/2;
+ result.lines.forEach((line,i)=>{const y=start+i*lineH+lineH/2;ctx.lineWidth=f*.18;ctx.strokeStyle='#160b24';ctx.shadowColor='#000';ctx.shadowBlur=7;ctx.shadowOffsetY=5;ctx.strokeText(line,w/2,y,w-pad*1.5);ctx.fillStyle=i%2?'#fff':'#ffe900';ctx.fillText(line,w/2,y,w-pad*1.5)});
+ ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+ // character/photo focal area, plus playful cartoon accents
+ if(photo){const boxW=w*.55,boxH=h*.39;ctx.save();ctx.beginPath();ctx.roundRect(w*.05,h*.36,boxW,boxH,24);ctx.clip();drawImage(photo,w*.05,h*.36,boxW,boxH,'contain');ctx.restore()}
+ else{ctx.font=`${Math.min(w*.32,h*.18)}px serif`;ctx.textAlign='center';ctx.fillText('🐒',w*.30,h*.60);ctx.font=`${Math.min(w*.25,h*.14)}px serif`;ctx.fillText('🐰',w*.76,h*.64)}
+ // red paint-style lower banner
+ const by=h*.77,bh=h*.15;ctx.fillStyle='#e51b19';ctx.beginPath();ctx.moveTo(w*.07,by+bh*.2);ctx.quadraticCurveTo(w*.5,by-bh*.12,w*.93,by+bh*.2);ctx.lineTo(w*.88,by+bh*.88);ctx.quadraticCurveTo(w*.5,by+bh*1.12,w*.12,by+bh*.88);ctx.closePath();ctx.fill();
+ const sub=$('subline').value.trim();if(sub){const sf=Math.min(w*.07,Math.max(22,w*.055));ctx.font=`900 ${sf}px system-ui,"Noto Sans Bengali",sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=sf*.16;ctx.strokeStyle='#5b0909';ctx.strokeText(sub,w/2,by+bh*.5,w*.78);ctx.fillStyle='#fff';ctx.fillText(sub,w/2,by+bh*.5,w*.78)}
+}
+function drawClassic(w,h,pad){
+ const grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,$('bg1').value);grad.addColorStop(1,$('bg2').value);ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+ if(photo){drawImage(photo,0,0,w,h,$('fit').value);if($('overlay').checked){ctx.fillStyle='rgba(16,7,30,.40)';ctx.fillRect(0,0,w,h)}}
+ ctx.save();ctx.globalAlpha=.13;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(w*.92,h*.13,h*.17,0,Math.PI*2);ctx.fill();ctx.restore();
+ const title=$('headline').value.trim()||'আপনার ভিডিওর শিরোনাম';
+ let font=Number($('fontSize').value)*(h>w?1: .9),maxW=w-pad*2;
+ const result=fitLines(title,maxW,font,h>w?6:4);font=result.font;
+ const lines=result.lines.slice(0,h>w?6:4),lineH=font*1.2,totalH=lines.length*lineH;
+ let startY=$('position').value==='top'?h*.20:$('position').value==='bottom'?h*.70-totalH/2:h*.48-totalH/2;
+ startY=Math.max(font*.7,Math.min(startY,h-totalH-font*.7));
+ rr(pad*.45,Math.max(12,startY-lineH*.48),maxW+pad*.1,Math.min(h-24,totalH+lineH*.35),22,'rgba(0,0,0,.22)');
+ ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`900 ${font}px system-ui,"Noto Sans Bengali",sans-serif`;ctx.lineJoin='round';
+ lines.forEach((line,i)=>{const y=startY+i*lineH;if($('shadow').checked){ctx.shadowColor='#000';ctx.shadowBlur=12;ctx.shadowOffsetY=5}ctx.lineWidth=Math.max(4,font*.09);ctx.strokeStyle=$('strokeColor').value;ctx.strokeText(line,w/2,y,maxW);ctx.fillStyle=$('textColor').value;ctx.fillText(line,w/2,y,maxW)});
+ ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+ // নিচের কালো ব্যান্ড ও সাদা চ্যানেল-নাম ইচ্ছাকৃতভাবে বাদ রাখা হয়েছে।
+ // লোগো থাকলে সেটি আলাদাভাবে Dhamaal টেমপ্লেটে দেখানো হবে।
+}
 function draw(){
  const mode=$('size').value;canvas.width=mode==='short'?720:mode==='square'?1080:1280;canvas.height=mode==='short'?1280:mode==='square'?1080:720;
  const w=canvas.width,h=canvas.height,pad=w*.055;
- const grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,$('bg1').value);grad.addColorStop(1,$('bg2').value);ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
- if(photo){drawImage(photo,0,0,w,h,$('fit').value);if($('overlay').checked){ctx.fillStyle='rgba(16,7,30,.40)';ctx.fillRect(0,0,w,h)}}
- // soft decorative accents
- ctx.save();ctx.globalAlpha=.13;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(w*.92,h*.13,h*.17,0,Math.PI*2);ctx.fill();ctx.restore();
- const title=$('headline').value.trim()||'আপনার ভিডিওর শিরোনাম';
- const base=Number($('fontSize').value)*(mode==='short'?1:mode==='square'?.9:1);
- const maxW=w-pad*2;ctx.textAlign='center';ctx.textBaseline='middle';
- let font=base,lines=[];
- function wrapText(){ctx.font=`900 ${font}px system-ui,"Noto Sans Bengali",sans-serif`;lines=[];let line='';for(const word of title.split(/\s+/)){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line)}
- wrapText();while(lines.length>(mode==='short'?6:4)&&font>26){font-=3;wrapText()}
- const lineH=font*1.2,totalH=lines.length*lineH;
- let startY=$('position').value==='top'?h*.20:$('position').value==='bottom'?h*.70-totalH/2:h*.48-totalH/2;
- startY=Math.max(font*.7,Math.min(startY,h-totalH-font*.7));
- const boxY=Math.max(12,startY-lineH*.48),boxH=Math.min(h-24,totalH+lineH*.35);
- ctx.fillStyle='rgba(0,0,0,.22)';roundRect(pad*.45,boxY,maxW+pad*.1,boxH,22);
- ctx.font=`900 ${font}px system-ui,"Noto Sans Bengali",sans-serif`;ctx.lineJoin='round';
- lines.slice(0,mode==='short'?6:4).forEach((line,i)=>{const y=startY+i*lineH;if($('shadow').checked){ctx.shadowColor='#000';ctx.shadowBlur=12;ctx.shadowOffsetY=5}else{ctx.shadowBlur=0;ctx.shadowOffsetY=0}ctx.lineWidth=Math.max(4,font*.09);ctx.strokeStyle=$('strokeColor').value;ctx.strokeText(line,w/2,y,maxW);ctx.fillStyle=$('textColor').value;ctx.fillText(line,w/2,y,maxW)});
- ctx.shadowBlur=0;ctx.shadowOffsetY=0;
- const bandH=mode==='short'?112:mode==='square'?100:88;ctx.fillStyle='rgba(15,7,28,.82)';ctx.fillRect(0,h-bandH,w,bandH);
- ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle='#fff';ctx.font=`750 ${mode==='short'?27:mode==='square'?29:32}px system-ui,"Noto Sans Bengali",sans-serif`;
- ctx.fillText($('channel').value||'Khushir Cartoon Ghor',pad,h-bandH/2,w-pad-(logo?100:0));
- if(logo){const max=mode==='short'?82:72,s=Math.min(max/logo.width,max/logo.height),lw=logo.width*s,lh=logo.height*s;ctx.drawImage(logo,w-pad-lw,h-bandH+(bandH-lh)/2,lw,lh)}
+ if($('template').value==='dhamaal')drawDhamaal(w,h,pad);else drawClassic(w,h,pad);
+ // logo badge in top corner for Dhamaal
+ if(logo&&$('template').value==='dhamaal'){const s=Math.min(w*.18/logo.width,w*.18/logo.height),lw=logo.width*s,lh=logo.height*s;ctx.save();ctx.beginPath();ctx.arc(w*.15,h*.08,w*.105,0,Math.PI*2);ctx.clip();ctx.drawImage(logo,w*.15-lw/2,h*.08-lh/2,lw,lh);ctx.restore();ctx.strokeStyle='#fff';ctx.lineWidth=6;ctx.beginPath();ctx.arc(w*.15,h*.08,w*.105,0,Math.PI*2);ctx.stroke()}
 }
 $('download').addEventListener('click',()=>{draw();canvas.toBlob(blob=>{if(!blob){alert('ডাউনলোড তৈরি হয়নি। আবার চেষ্টা করুন।');return}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='khushir-thumbnail.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)},'image/png')});
-$('reset').addEventListener('click',()=>{['photo','logo'].forEach(id=>$(id).value='');$('headline').value='আজকের মজার গল্প';$('channel').value='Khushir Cartoon Ghor';$('lang').value='বাংলা';$('size').value='wide';$('bg1').value='#251044';$('bg2').value='#7138d8';$('textColor').value='#ffe34d';$('strokeColor').value='#170b2b';$('fontSize').value=68;$('fontValue').textContent='68';$('position').value='center';$('fit').value='cover';$('shadow').checked=true;$('overlay').checked=true;photo=logo=null;draw()});
+$('reset').addEventListener('click',()=>{['photo','logo'].forEach(id=>$(id).value='');$('template').value='classic';$('headline').value='আজকের মজার গল্প';$('subline').value='একটি মজার শিক্ষামূলক গল্প';$('channel').value='Khushir Cartoon Ghor';$('lang').value='বাংলা';$('size').value='short';$('bg1').value='#11b9ec';$('bg2').value='#27b84b';$('textColor').value='#ffe900';$('strokeColor').value='#160b24';$('fontSize').value=68;$('fontValue').textContent='68';$('position').value='center';$('fit').value='cover';$('shadow').checked=true;$('overlay').checked=true;photo=logo=null;draw()});
 draw();
 </script>
 </body></html>
